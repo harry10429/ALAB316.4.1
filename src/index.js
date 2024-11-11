@@ -147,13 +147,13 @@ function validateLog(evt) {
 }
 
 function loginValidate() {
-  const logName = uNameL.value;
-  const logPwd = pwdL.value;
+  const logName = uNameL.value.toLowerCase();
+  const logPwd = pwdL.value.toLowerCase();
   if (logName || logPwd) {
     if (localStorage.getItem(logName) !== null) {
       let keyName = localStorage.getItem(logName);
 
-      if (keyName == logPwd.toLowerCase()) {
+      if (keyName == logPwd) {
         return true;
       }
       alert("Password does not match");
