@@ -8,6 +8,7 @@ const confPwd = regForm.elements["passwordCheck"];
 
 const uNameL = logForm.elements["username"];
 const pwdL = logForm.elements["password"];
+const loginSti = logForm.elements["persist"];
 
 regForm.addEventListener("submit", validateReg);
 
@@ -33,11 +34,13 @@ function validateReg(evt) {
     return false;
   }
   alert(`Username: ${uNameR.value}
-         Email: ${email.value}
-         Password ${pwdR.value}
-         confirmed password ${confPwd.value}
+  Email: ${email.value}
+  Password ${pwdR.value}
+  confirmed password ${confPwd.value}
     `);
-
+  let storeName = uNameR.value.toLowerCase();
+  let storePwd = pwdR.value.toLowerCase();
+  localStorage.setItem(storeName, storePwd);
   clearForm();
   return true;
 }
@@ -118,4 +121,47 @@ function validateCPwd() {
 
 function clearForm() {
   regForm.reset();
+}
+
+logForm.addEventListener("submit", validateLog);
+
+function displayM() {
+  if (loginSti.checked) {
+    alert(
+      "normally, this would be handled by a variety of persistent login tools and technologies"
+    );
+  } else {
+    alert("Sucess Login!");
+  }
+}
+
+function validateLog(evt) {
+  const logValid = loginValidate();
+  if (logValid === false) {
+    evt.returnValue = false;
+    return false;
+  }
+  displayM();
+  logForm.reset();
+  return true;
+}
+
+function loginValidate() {
+  const logName = uNameL.value;
+  const logPwd = pwdL.value;
+  if (logName || logPwd) {
+    if (localStorage.getItem(logName) !== null) {
+      let keyName = localStorage.getItem(logName);
+
+      if (keyName == logPwd.toLowerCase()) {
+        return true;
+      }
+      alert("Password does not match");
+      return false;
+    }
+    alert("There is no existed Username");
+    return false;
+  }
+  alert("Both field can't be empty");
+  return false;
 }
